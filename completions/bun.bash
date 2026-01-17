@@ -68,7 +68,7 @@ _bun_is_exist_and_gnu() {
     [[ $version_string == *GNU* ]] && return 0 || return 1
 }
 
-# appends filenames to the the list of completions, considers only files inside current working directory
+# appends filenames to the list of completions, considers only files inside current working directory
 # @param `$1`: string - extended-regex aka ERE, white list of file extensions
 # @param `$2`: string - word immediately before the cursor
 _bun_files_completions() {
@@ -208,7 +208,7 @@ _bun_subcommand_completions() {
 
 # bun completions entry point function
 _bun_completions() {
-    GLOBAL_OPTIONS_LONG=(
+    local GLOBAL_OPTIONS_LONG=(
         --use
         --cwd
         --bunfile
@@ -240,15 +240,15 @@ _bun_completions() {
         --dump-limits
         --disable-bun-js
     )
-    GLOBAL_OPTIONS_SHORT=(-c -v -d -e -h -i -l -u -p)
+    local GLOBAL_OPTIONS_SHORT=(-c -v -d -e -h -i -l -u -p)
 
-    PACKAGE_OPTIONS_ADD_LONG=(--development --optional --peer)
-    PACKAGE_OPTIONS_ADD_SHORT=()
+    local PACKAGE_OPTIONS_ADD_LONG=(--development --optional --peer)
+    local PACKAGE_OPTIONS_ADD_SHORT=()
 
-    PACKAGE_OPTIONS_REMOVE_LONG=()
-    PACKAGE_OPTIONS_REMOVE_SHORT=()
+    local PACKAGE_OPTIONS_REMOVE_LONG=()
+    local PACKAGE_OPTIONS_REMOVE_SHORT=()
 
-    PACKAGE_OPTIONS_SHARED_LONG=(
+    local PACKAGE_OPTIONS_SHARED_LONG=(
         --config
         --yarn
         --production
@@ -266,9 +266,9 @@ _bun_completions() {
         --link-native-bins
         --help
     )
-    PACKAGE_OPTIONS_SHARED_SHORT=(-c -y -p -f -g)
+    local PACKAGE_OPTIONS_SHARED_SHORT=(-c -y -p -f -g)
 
-    PM_OPTIONS_LONG=(
+    local PM_OPTIONS_LONG=(
         --config
         --yarn
         --production
@@ -290,7 +290,7 @@ _bun_completions() {
         --link-native-bins
         --help
     )
-    PM_OPTIONS_SHORT=(-c -y -p -f -g)
+    local PM_OPTIONS_SHORT=(-c -y -p -f -g)
 
     local fst_word="${COMP_WORDS[1]}"
     local pre_word="${COMP_WORDS[$((COMP_CWORD - 1))]}"
@@ -376,7 +376,9 @@ _bun_completions() {
             --no-git
             --verbose
             --no-package-json
-            --open next react
+            --open
+            next
+            react
         )
         # shellcheck disable=SC2207 # `create_options` is array of words with no space inside each element
         COMPREPLY=($(compgen -W "${create_options[*]}" -- "${cur_word}"))
@@ -447,7 +449,7 @@ _bun_completions() {
 
             for comp in "${COMPREPLY[@]}"; do
                 # if `pre_word` is script name, then scripts are filtered out from `COMPREPLY`, so
-                # the `_pre_is_script` is needed to detect that previous word is the script name
+                # the `pre_is_script` is needed to detect that previous word is the script name
                 [[ ${pre_word} == "${comp}" ]] && return # b.
             done
 
